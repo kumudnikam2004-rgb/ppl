@@ -1,0 +1,59 @@
+//Q1
+
+db.Employee.find({designation:{$in:[/manager/i,/floor supervisor/i]}}).pretty()
+
+//Q2
+
+db.Employee.find({firstName: {$regex: "k$", $options: "i"}}).pretty()
+
+//Q3
+
+var cursor = db.Employee.find(
+  { salary: { $gt: 80000 } }, 
+  { firstName: 1, lastName: 1, _id: 0 }
+);
+
+cursor.forEach(function(emp) {
+  print(emp.firstName + " " + emp.lastName);
+});
+
+//Q4
+
+db.Employee.find().sort({ designation: -1 }).pretty()
+
+//Q5
+
+db.Employee.countDocuments()
+
+//Q6
+db.Transaction.aggregate([
+  {
+    $group: {
+      _id: null,
+      totalAmountSum: { $sum: "$payment.totalAmountPaid" }
+    }
+  }
+])
+
+//Q7
+db.Transaction.aggregate([
+  {
+    $group: {
+      _id: "$payment.type",                     
+      totalAmountSum: { $sum: "$payment.totalAmountPaid" }  
+    }
+  }
+])
+
+//Q8
+db.Transaction.find({}, { transactionId: 1})sort({ transactionDate: -1 }).limit(1)
+
+//Q9
+
+var employeeIds = db.Transaction.distinct("employeeId", { "payment.totalAmountPaid": { $gt: 500 } });
+db.Employee.find(
+  { employeeId: { $in: employeeIds } },
+  { designation: 1, _id:0,employeeId:1 }
+).pretty();
+
+

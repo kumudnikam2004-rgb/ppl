@@ -1,0 +1,331 @@
+Employee
+
+db.Employee.insertMany([
+  {
+    employeeId: 1,
+    firstName: "John",
+    lastName: "Doe",
+    email: "john.doe@example.com",
+    phoneNo: "123-456-7890",
+    address: {
+      houseNo: "101",
+      street: "Main St",
+      city: "New York",
+      state: "NY",
+      country: "USA",
+      pinCode: "10001"
+    },
+    salary: 75000,
+    designation: "Software Engineer",
+    experience: 5,
+    dateOfJoining: new Date("2018-06-15"),
+    birthdate: new Date("1990-04-20")
+  },
+  {
+    employeeId: 2,
+    firstName: "Jane",
+    lastName: "Smith",
+    email: "jane.smith@example.com",
+    phoneNo: "987-654-3210",
+    address: {
+      houseNo: "202",
+      street: "2nd Ave",
+      city: "San Francisco",
+      state: "CA",
+      country: "USA",
+      pinCode: "94105"
+    },
+    salary: 90000,
+    designation: "Project Manager",
+    experience: 8,
+    dateOfJoining: new Date("2016-03-01"),
+    birthdate: new Date("1987-09-10")
+  }
+])
+
+Transaction 
+
+db.Transaction.insertMany([
+  {
+    transactionId: 1001,
+    transactionDate: new Date("2025-08-25T14:30:00Z"),
+    employeeId: 1,  // Reference to Employee.employeeId
+    transactionDetails: [
+      {
+        itemId: "A101",
+        itemName: "Laptop",
+        quantity: 1,
+        price: 1200
+      },
+      {
+        itemId: "B205",
+        itemName: "Mouse",
+        quantity: 2,
+        price: 25
+      }
+    ],
+    payment: {
+      type: "Credit",
+      totalAmountPaid: 1250,
+      paymentSuccessful: true
+    },
+    remark: "Urgent delivery requested"
+  },
+  {
+    transactionId: 1002,
+    transactionDate: new Date("2025-08-26T10:00:00Z"),
+    employeeId: 2,
+    transactionDetails: [
+      {
+        itemId: "C303",
+        itemName: "Keyboard",
+        quantity: 1,
+        price: 100
+      }
+    ],
+    payment: {
+      type: "Cash",
+      totalAmountPaid: 100,
+      paymentSuccessful: true
+    },
+    remark: ""
+  }
+])
+
+
+//Query to join Employee and Transaction
+
+db.Transaction.aggregate([
+  {
+    $lookup: {
+      from: "Employee",
+      localField: "employeeId",
+      foreignField: "employeeId",
+      as: "employeeInfo"
+    }
+  },
+  {
+    $unwind: "$employeeInfo"
+  }
+]).pretty()
+
+
+//Que 1
+
+db.Employee.insertMany([
+  {
+    employeeId: 3,
+    firstName: "Karan",
+    lastName: "Patel",
+    email: "karan.patel@example.com",
+    phoneNo: "555-123-4567",
+    address: {
+      houseNo: "303",
+      street: "3rd Blvd",
+      city: "Chicago",
+      state: "IL",
+      country: "USA",
+      pinCode: "60601"
+    },
+    salary: 60000,
+    designation: "Supervisor",
+    experience: 4,
+    dateOfJoining: new Date("2019-01-20"),
+    birthdate: new Date("1992-07-15")
+  },
+  {
+    employeeId: 4,
+    firstName: "Kavita",
+    lastName: "Sharma",
+    email: "kavita.sharma@example.com",
+    phoneNo: "555-987-6543",
+    address: {
+      houseNo: "404",
+      street: "4th Street",
+      city: "Houston",
+      state: "TX",
+      country: "USA",
+      pinCode: "77001"
+    },
+    salary: 65000,
+    designation: "Supervisor",
+    experience: 6,
+    dateOfJoining: new Date("2017-11-05"),
+    birthdate: new Date("1989-11-25")
+  },
+  {
+    employeeId: 5,
+    firstName: "Mike",
+    lastName: "Johnson",
+    email: "mike.johnson@example.com",
+    phoneNo: "555-678-9012",
+    address: {
+      houseNo: "505",
+      street: "5th Avenue",
+      city: "Seattle",
+      state: "WA",
+      country: "USA",
+      pinCode: "98101"
+    },
+    salary: 72000,
+    designation: "Software Engineer",
+    experience: 7,
+    dateOfJoining: new Date("2015-07-10"),
+    birthdate: new Date("1988-03-12")
+  }
+])
+
+
+//Que2
+
+db.Transaction.insertMany([
+  {
+    transactionId: 203,
+    transactionDate: new Date("2025-08-27T09:15:00Z"),
+    employeeId: 3,
+    transactionDetails: [
+      { itemId: "D404", itemName: "Monitor", quantity: 2, price: 300 }
+    ],
+    payment: { type: "Debit", totalAmountPaid: 600, paymentSuccessful: true },
+    remark: ""
+  },
+  {
+    transactionId: 204,
+    transactionDate: new Date("2025-08-27T11:45:00Z"),
+    employeeId: 4,
+    transactionDetails: [
+      { itemId: "E505", itemName: "Printer", quantity: 1, price: 150 }
+    ],
+    payment: { type: "Cash", totalAmountPaid: 150, paymentSuccessful: true },
+    remark: ""
+  },
+  {
+    transactionId: 205,
+    transactionDate: new Date("2025-08-28T13:00:00Z"),
+    employeeId: 5,
+    transactionDetails: [
+      { itemId: "F606", itemName: "Scanner", quantity: 1, price: 200 }
+    ],
+    payment: { type: "Credit", totalAmountPaid: 200, paymentSuccessful: false },
+    remark: "Payment failed"
+  },
+  {
+    transactionId: 206,
+    transactionDate: new Date("2025-08-29T15:30:00Z"),
+    employeeId: 1,
+    transactionDetails: [
+      { itemId: "G707", itemName: "Webcam", quantity: 3, price: 80 }
+    ],
+    payment: { type: "Debit", totalAmountPaid: 240, paymentSuccessful: true },
+    remark: ""
+  },
+  {
+    transactionId: 207,
+    transactionDate: new Date("2025-08-30T10:15:00Z"),
+    employeeId: 2,
+    transactionDetails: [
+      { itemId: "H808", itemName: "Headphones", quantity: 2, price: 60 }
+    ],
+    payment: { type: "Cash", totalAmountPaid: 120, paymentSuccessful: true },
+    remark: ""
+  },
+  {
+    transactionId: 208,
+    transactionDate: new Date("2025-08-31T09:45:00Z"),
+    employeeId: 3,
+    transactionDetails: [
+      { itemId: "I909", itemName: "External HDD", quantity: 1, price: 150 }
+    ],
+    payment: { type: "Credit", totalAmountPaid: 150, paymentSuccessful: true },
+    remark: ""
+  },
+  {
+    transactionId: 209,
+    transactionDate: new Date("2025-09-01T14:00:00Z"),
+    employeeId: 4,
+    transactionDetails: [
+      { itemId: "J010", itemName: "USB Drive", quantity: 5, price: 15 }
+    ],
+    payment: { type: "Debit", totalAmountPaid: 75, paymentSuccessful: true },
+    remark: ""
+  },
+  {
+    transactionId: 210,
+    transactionDate: new Date("2025-09-02T11:30:00Z"),
+    employeeId: 5,
+    transactionDetails: [
+      { itemId: "K111", itemName: "Laptop Bag", quantity: 1, price: 45 }
+    ],
+    payment: { type: "Cash", totalAmountPaid: 45, paymentSuccessful: true },
+    remark: ""
+  }
+])
+
+
+//Que3
+
+db.Employee.find().pretty()
+db.Transaction.find().pretty()
+
+
+//Que4
+
+db.Employee.updateMany(
+  {},
+  { $inc: { salary: 4000 } }
+)
+
+
+//Que5
+db.Transaction.updateOne(
+  { transactionId: 201 },
+  { $set: { remark: "Updated remark for transaction 201" } }
+)
+
+
+//Que6
+db.Employee.updateOne(
+  { firstName: "Karan", designation: "Supervisor" },
+  { $set: { designation: "Manager" } }
+)
+
+//Que7
+
+db.Employee.updateOne(
+  { employeeId: 5 },
+  { $set: { designation: "Senior Manager" } }
+)
+
+
+//Que8
+db.Employee.updateOne(
+  { employeeId: 3 },
+  {
+    $set: {
+      "address.houseNo": "999",
+      "address.street": "New Street",
+      "address.city": "New City",
+      "address.state": "NC",
+      "address.country": "USA",
+      "address.pinCode": "12345"
+    }
+  }
+)
+
+
+//Que9
+
+// Find employeeId of Jane first
+const jane = db.Employee.findOne({ firstName: "Jane" });
+if (jane) {
+  db.Transaction.deleteOne({
+    employeeId: jane.employeeId,
+    transactionDate: new Date("2025-08-30T10:15:00.000Z")
+  })
+}
+
+//Que10
+db.Employee.deleteMany(
+  { firstName: { $regex: /^K/i } }
+)
+

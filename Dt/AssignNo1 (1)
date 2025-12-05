@@ -1,0 +1,362 @@
+Lab Assignments :
+creation of actors collection
+db.actors.insertMany([
+  {
+    actorId: "A001",
+    firstName: "Leonardo",
+    lastName: "DiCaprio",
+    address: {
+      street: "123 Hollywood Blvd",
+      city: "Los Angeles",
+      state: "CA",
+      country: "USA",
+      pinCode: "90028"
+    },
+    contactDetails: {
+      emailId: "leo@example.com",
+      phoneNo: "+1-555-123-4567"
+    },
+    age: 46
+  },
+  {
+    actorId: "A002",
+    firstName: "Joseph",
+    lastName: "Gordon-Levitt",
+    address: {
+      street: "456 Sunset Blvd",
+      city: "Los Angeles",
+      state: "CA",
+      country: "USA",
+      pinCode: "90028"
+    },
+    contactDetails: {
+      emailId: "joseph@example.com",
+      phoneNo: "+1-555-234-5678"
+    },
+    age: 40
+  }
+])
+
+
+creation of films collection 
+
+db.films.insertMany([
+  {
+    _id: ObjectId('68a4467ebc0cd985c189b03f'),
+    filmId: 'F001',
+    title: 'Inception',
+    yearOfRelease: 2010,
+    genres: [ 'Action', 'Sci-Fi', 'Thriller' ],
+    actors: [ 'A001', 'A002' ],
+    directors: [ { firstName: 'Christopher', lastName: 'Nolan' } ],
+    releaseDetails: [
+      {
+        placeOfRelease: 'USA',
+        dateOfRelease: ISODate('2010-07-16T00:00:00.000Z'),
+        rating: 8.8
+      },
+      {
+        placeOfRelease: 'UK',
+        dateOfRelease: ISODate('2010-07-16T00:00:00.000Z'),
+        rating: 8.7
+      }
+    ]
+  }
+]
+)
+
+
+
+1. Insert at least 10 documents in the collection Film 
+    a. Insert at least one document with film belonging to two genres.
+
+    db.films.insertOne({
+         filmId: "F002",
+         title: "Titanic",
+         yearOfRelease: 1997,
+         genres: ["Romantic", "Drama"],  
+         actors: ["A001"],              
+         directors: [
+           { firstName: "James", lastName: "Cameron" }
+         ],
+         releaseDetails: [
+           {
+             placeOfRelease: "USA",
+             dateOfRelease: ISODate("1997-12-19T00:00:00.000Z"),
+             rating: 7.9
+           },
+           {
+             placeOfRelease: "UK",
+             dateOfRelease: ISODate("1998-01-23T00:00:00.000Z"),
+             rating: 7.8
+           }
+         ]
+       })
+
+
+    b. Insert at least one document with film that is released at more than one place and on two different dates.
+
+      db.films.insertOne({
+  filmId: "F003",
+  title: "The Revenant",
+  yearOfRelease: 2015,
+  genres: ["Adventure", "Drama"],
+  actors: ["A001"],
+  directors: [
+    { firstName: "Alejandro", lastName: "González Iñárritu" }
+  ],
+  releaseDetails: [
+    {
+      placeOfRelease: "USA",
+      dateOfRelease: ISODate("2015-12-25T00:00:00.000Z"),
+      rating: 8.0
+    },
+    {
+      placeOfRelease: "UK",
+      dateOfRelease: ISODate("2016-01-15T00:00:00.000Z"),
+      rating: 7.9
+    }
+  ]
+})
+
+
+  c. Insert at least three documents with the films released in the same year.
+    db.films.insertMany([
+  {
+    filmId: "F004",
+    title: "Avengers: Endgame",
+    yearOfRelease: 2019,
+    genres: ["Action", "Sci-Fi"],
+    actors: ["A001"],
+    directors: [{ firstName: "Anthony", lastName: "Russo" }, { firstName: "Joe", lastName: "Russo" }],
+    releaseDetails: [
+      {
+        placeOfRelease: "USA",
+        dateOfRelease: ISODate("2019-04-26T00:00:00.000Z"),
+        rating: 8.4
+      },
+      {
+        placeOfRelease: "India",
+        dateOfRelease: ISODate("2019-04-26T00:00:00.000Z"),
+        rating: 8.5
+      }
+    ]
+  },
+  {
+    filmId: "F005",
+    title: "Joker",
+    yearOfRelease: 2019,
+    genres: ["Crime", "Drama"],
+    actors: [],
+    directors: [{ firstName: "Todd", lastName: "Phillips" }],
+    releaseDetails: [
+      {
+        placeOfRelease: "USA",
+        dateOfRelease: ISODate("2019-10-04T00:00:00.000Z"),
+        rating: 8.5
+      },
+      {
+        placeOfRelease: "UK",
+        dateOfRelease: ISODate("2019-10-04T00:00:00.000Z"),
+        rating: 8.4
+      }
+    ]
+  },
+  {
+    filmId: "F006",
+    title: "Parasite",
+    yearOfRelease: 2019,
+    genres: ["Thriller", "Drama"],
+    actors: [],
+    directors: [{ firstName: "Bong", lastName: "Joon-ho" }],
+    releaseDetails: [
+      {
+        placeOfRelease: "South Korea",
+        dateOfRelease: ISODate("2019-05-30T00:00:00.000Z"),
+        rating: 8.6
+      },
+      {
+        placeOfRelease: "USA",
+        dateOfRelease: ISODate("2019-10-11T00:00:00.000Z"),
+        rating: 8.6
+      }
+    ]
+  }
+])
+
+
+d. Insert at least two documents with the films directed by one director.
+db.films.insertMany([
+  {
+    filmId: "F008",
+    title: "Interstellar",
+    yearOfRelease: 2014,
+    genres: ["Adventure", "Drama", "Sci-Fi"],
+    actors: ["A001"],
+    directors: [{ firstName: "Christopher", lastName: "Nolan" }],
+    releaseDetails: [
+      {
+        placeOfRelease: "USA",
+        dateOfRelease: ISODate("2014-11-07T00:00:00.000Z"),
+        rating: 8.6
+      },
+      {
+        placeOfRelease: "UK",
+        dateOfRelease: ISODate("2014-11-07T00:00:00.000Z"),
+        rating: 8.5
+      }
+    ]
+  },
+  {
+    filmId: "F009",
+    title: "The Dark Knight",
+    yearOfRelease: 2008,
+    genres: ["Action", "Crime", "Drama"],
+    actors: ["A001", "A002"],
+    directors: [{ firstName: "Christopher", lastName: "Nolan" }],
+    releaseDetails: [
+      {
+        placeOfRelease: "USA",
+        dateOfRelease: ISODate("2008-07-18T00:00:00.000Z"),
+        rating: 9.0
+      },
+      {
+        placeOfRelease: "India",
+        dateOfRelease: ISODate("2008-07-18T00:00:00.000Z"),
+        rating: 9.1
+      }
+    ]
+  }
+])
+
+e. Insert at least two documents with films those are acted by a pair
+‘Madhuri Dixit’ and ‘Shahrukh Khan’.
+  db.films.insertMany([
+  {
+    filmId: "F010",
+    title: "Dil To Pagal Hai",
+    yearOfRelease: 1997,
+    genres: ["Romance", "Musical"],
+    actors: ["A003", "A004"],
+    directors: [{ firstName: "Yash", lastName: "Chopra" }],
+    releaseDetails: [
+      {
+        placeOfRelease: "India",
+        dateOfRelease: ISODate("1997-10-30T00:00:00.000Z"),
+        rating: 7.2
+      }
+    ]
+  },
+  {
+    filmId: "F011",
+    title: "Koyla",
+    yearOfRelease: 1997,
+    genres: ["Action", "Drama"],
+    actors: ["A003", "A004"],
+    directors: [{ firstName: "Rakesh", lastName: "Roshan" }],
+    releaseDetails: [
+      {
+        placeOfRelease: "India",
+        dateOfRelease: ISODate("1997-04-18T00:00:00.000Z"),
+        rating: 6.0
+      }
+    ]
+  }
+])
+
+
+Display all the documents inserted in both the collections.
+
+db.films.find().pretty()
+db.actors.find().pretty()
+
+Add a value to the rating of the film whose title starts with ‘T’.
+
+db.films.updateMany(
+  { title: { $regex: "^T" } },
+  { $inc: { "releaseDetails.$[].rating": 1 } }
+);
+
+
+Add an actor named "Ritik Roshan" in the ‘Actor’ collection.
+
+db.actors.insertOne({
+  actorId: "A005",
+  firstName: "Ritik",
+  lastName: "Roshan",
+  address: {
+    street: "Juhu Street",
+    city: "Mumbai",
+    state: "MH",
+    country: "India",
+    pinCode: "400049"
+  },
+  contactDetails: {
+    emailId: "ritik@example.com",
+    phoneNo: "+91-9988776655"
+  },
+  age: 50
+});
+
+Also add the details of the film in ‘Film’ collection in which this actor has acted in.
+
+db.films.insertOne({
+  filmId: "F012",
+  title: "Krrish",
+  yearOfRelease: 2006,
+  genres: ["Action", "Sci-Fi"],
+  actors: ["A005"], 
+  directors: [
+    { firstName: "Rakesh", lastName: "Roshan" }
+  ],
+  releaseDetails: [
+    {
+      placeOfRelease: "India",
+      dateOfRelease: ISODate("2006-06-23T00:00:00.000Z"),
+      rating: 7.1
+    },
+    {
+      placeOfRelease: "USA",
+      dateOfRelease: ISODate("2006-07-01T00:00:00.000Z"),
+      rating: 7.0
+    }
+  ]
+});
+
+
+6. Delete the film "Titanic"
+
+db.films.deleteOne({ title: "Titanic" });
+
+7. Delete an actor named "Joseph Gordon-Levitt".
+db.actors.deleteOne({ firstName: "Joseph", lastName: "Gordon-Levitt" });
+
+8.Delete all actors from an ‘Actor’ collection who have age greater than “50”
+  db.actors.deleteMany({ age: { $gt: 50 } });
+
+9. Update the actor’s address where Actor Id is “A005”.
+
+db.actors.updateOne(
+  { actorId: "A005" },
+  { 
+    $set: { 
+      address: {
+        street: "santa cruz",
+        city: "Mumbai",
+        state: "MH",
+        country: "India",
+        pinCode: "400049"
+      }
+    } 
+  }
+);
+
+
+10. Update the genre of the film directed by “Alejandro González Iñárritu”.
+db.films.updateMany(
+  { "directors.firstName": "Alejandro", "directors.lastName": "González Iñárritu" },
+  { 
+    $set: { genres: [ "Drama", "Biography" ] } 
+  }
+);
+

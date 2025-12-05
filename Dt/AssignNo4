@@ -1,0 +1,321 @@
+CREATE (b1:Book {
+    title: "The White Tiger",
+    tags: ["Fiction", "Society", "India"],
+    status: "available",
+    condition: "new",
+    cost: 450,
+    type: "Novel"
+}),
+(b2:Book {
+    title: "Introduction to Machine Learning",
+    tags: ["Technology", "Data Science", "Reference"],
+    status: "issued",
+    condition: "old",
+    cost: 1200,
+    type: "Journal"
+}),
+(b3:Book {
+    title: "Ponniyin Selvan",
+    tags: ["Historical Fiction", "India", "Tamil"],
+    status: "available",
+    condition: "new",
+    cost: 600,
+    type: "Novel"
+});
+
+
+CREATE (p1:Person {name: "Arundhati Roy", role: "Author"}),
+       (p2:Person {name: "Chetan Bhagat", role: "Author"}),
+       (p3:Person {name: "Ravi", role: "Reader"}),
+       (p4:Person {name: "Sneha", role: "Reader"}),
+       (p5:Person {name: "Deepak", role: "Translator"}),
+       (p6:Person {name: "Meera", role: "Translator"});
+
+
+CREATE (pub1:Publisher {name: "Penguin India"}),
+(pub2:Publisher {name: "Vikas Publishing"}),
+(pub3:Publisher {name: "McGraw Hill India"});
+
+
+
+MATCH (b:Book {title:"The White Tiger"}), (pub:Publisher {name:"Penguin India"})
+CREATE (b)-[:PublishedBy]->(pub);
+
+MATCH (b:Book {title:"Introduction to Machine Learning"}), (pub:Publisher {name:"McGraw Hill India"})
+CREATE (b)-[:PublishedBy]->(pub);
+
+MATCH (b:Book {title:"Ponniyin Selvan"}), (pub:Publisher {name:"Vikas Publishing"})
+CREATE (b)-[:PublishedBy]->(pub);
+
+MATCH (b:Book {title:"The White Tiger"}), (p:Person {name:"Ravi"})
+CREATE (p)-[:Votes {rating: 5}]->(b);
+
+MATCH (b:Book {title:"Ponniyin Selvan"}), (p:Person {name:"Sneha"})
+CREATE (p)-[:Votes {rating: 4}]->(b);
+
+MATCH (b:Book {title:"The White Tiger"}), (p:Person {name:"Ravi"})
+CREATE (p)-[:ReviewedBy {review:"Very insightful about Indian society"}]->(b);
+
+
+MATCH (b:Book {title:"The White Tiger"}), (p:Person {name:"Deepak"})
+CREATE (b)-[:TranslatedBy {language:"Hindi"}]->(p);
+
+MATCH (b:Book {title:"Ponniyin Selvan"}), (p:Person {name:"Meera"})
+CREATE (b)-[:TranslatedBy {language:"Hindi"}]->(p);
+
+MATCH (b:Book {title:"Introduction to Machine Learning"}), (p:Person {name:"Ravi"})
+CREATE (b)-[:IssuedBy {date: date("2025-09-01")}]->(p),
+       (b)-[:ReturnedBy {date: date("2025-09-10")}]->(p);
+
+MATCH (n) RETURN n;
+
+assign 5 Questions
+
+//Q1
+MATCH (b:Book {title: "title: Introduction to Machine Learning"})-[:IssuedBy]->(p:Person)
+RETURN p.name AS PersonWhoIssued;
+
+
+
+//Q2
+MATCH (:Book {title: "Introduction to Machine Learning"})-[:IssuedBy]->(p:Person)
+RETURN COUNT(p) AS NumberOfPeopleWhoRead;
+
+//Q3
+MATCH (:Book)-[:IssuedBy]->(p:Person {name: "Mr.Joshi"})
+WITH p, COUNT(*) AS issuedCount
+SET p.NumberOfBooksIssued = issuedCount
+RETURN p.name, p.NumberOfBooksIssued;
+
+//Q4
+MATCH (pub:Publisher {city: "Pune"})
+RETURN pub.name AS PublisherName;
+
+assign 6 Questions
+
+//Q1
+MATCH (r:Person)-[:Votes]->(b:Book)
+WHERE b.title IN ["The White Tiger", "Ponniyin Selvan", "Introduction to Machine Learning"]
+  AND r.role = "Reader"
+RETURN DISTINCT r.name AS ReadersWhoRecommended;
+
+//Q2
+MATCH (r:Person {role: "Reader"})
+WHERE NOT (r)-[:Votes]->(:Book)
+RETURN r.name AS ReadersWithNoRecommendation;
+
+
+//Q3
+MATCH (a:Person {role: "Author"})<-[:PublishedBy]-(b:Book)<-[:IssuedBy]-(r:Person {role:"Reader"})
+WITH a, COUNT(DISTINCT r) AS readerCount
+ORDER BY readerCount DESC
+LIMIT 1
+RETURN a.name AS MostReadAuthor, readerCount;
+
+
+//Q4
+MATCH (r1:Person {name: "Ravi", role:"Reader"})-[:Votes]->(b:Book)<-[:IssuedBy]-(r2:Person {role:"Reader"})
+RETURN DISTINCT b.title AS BooksRecommendedAndRead;
+
+
+//SONG Database 
+//Artists
+CREATE (a1:Artist {name:"Arijit Singh", genre:"Romantic", debutYear:2007}),
+       (a2:Artist {name:"Neha Kakkar", genre:"Pop", debutYear:2006});
+
+// Song Authors
+CREATE (sa1:SongAuthor {name:"Amitabh Bhattacharya", birthYear:1976}),
+       (sa2:SongAuthor {name:"Irshad Kamil", birthYear:1971});
+
+// Songs
+CREATE (s1:Song {title:"Tum Hi Ho", releaseYear:2013, language:"Hindi", duration:240}),
+       (s2:Song {title:"Dilbar", releaseYear:2018, language:"Hindi", duration:210});
+
+// Recording Studios
+CREATE (rs1:RecordingStudio {name:"YRF Studio", location:"Mumbai"}),
+       (rs2:RecordingStudio {name:"T-Series Studio", location:"Noida"});
+
+// Recording Companies
+CREATE (rc1:RecordingCompany {name:"Yash Raj Films", headquarters:"Mumbai", foundedYear:1970}),
+       (rc2:RecordingCompany {name:"T-Series", headquarters:"Noida", foundedYear:1983});
+
+// Artists performing Songs
+MATCH (a:Artist {name:"Arijit Singh"}), (s:Song {title:"Tum Hi Ho"})
+CREATE (a)-[:Performs {role:"Lead Vocals", performanceDate:date("2013-01-01")}]->(s);
+
+MATCH (a:Artist {name:"Neha Kakkar"}), (s:Song {title:"Dilbar"})
+CREATE (a)-[:Performs {role:"Lead Vocals", performanceDate:date("2018-01-01")}]->(s);
+
+// Songs written by Song Authors
+MATCH (s:Song {title:"Tum Hi Ho"}), (sa:SongAuthor {name:"Amitabh Bhattacharya"})
+CREATE (s)-[:WrittenBy {contributionType:"Lyrics"}]->(sa);
+
+MATCH (s:Song {title:"Dilbar"}), (sa:SongAuthor {name:"Irshad Kamil"})
+CREATE (s)-[:WrittenBy {contributionType:"Lyrics"}]->(sa);
+
+// Songs recorded in Studios
+MATCH (s:Song {title:"Tum Hi Ho"}), (rs:RecordingStudio {name:"YRF Studio"})
+CREATE (s)-[:RecordedIn {date:date("2013-01-01"), sessionType:"Studio"}]->(rs);
+
+MATCH (s:Song {title:"Dilbar"}), (rs:RecordingStudio {name:"T-Series Studio"})
+CREATE (s)-[:RecordedIn {date:date("2018-01-01"), sessionType:"Studio"}]->(rs);
+
+// Studios managed by Recording Companies
+MATCH (rs:RecordingStudio {name:"YRF Studio"}), (rc:RecordingCompany {name:"Yash Raj Films"})
+CREATE (rs)-[:ManagedBy {since:date("1970-01-01")}]->(rc);
+
+MATCH (rs:RecordingStudio {name:"T-Series Studio"}), (rc:RecordingCompany {name:"T-Series"})
+CREATE (rs)-[:ManagedBy {since:date("1983-01-01")}]->(rc);
+
+
+// Show only Song database nodes and their relationships
+MATCH (n)
+WHERE n:Song OR n:Artist OR n:SongAuthor OR n:RecordingStudio OR n:RecordingCompany
+OPTIONAL MATCH (n)-[r]->(m)
+WHERE m:Song OR m:Artist OR m:SongAuthor OR m:RecordingStudio OR m:RecordingCompany
+RETURN n, r, m;
+
+
+Assing 5 Ques 
+//Q1
+MATCH (s:Song)-[:WrittenBy]->(sa:SongAuthor {name:"Amitabh Bhattacharya"})
+RETURN s.title AS SongsWritten;
+
+//Q2
+
+MATCH (s:Song {title:"Tum Hi Ho"})-[:RecordedIn]->(:RecordingStudio)-[:ManagedBy]->(rc:RecordingCompany)
+RETURN DISTINCT rc.name AS RecordingCompanies;
+
+//Q3
+MATCH (a:Artist)-[:Performs]->(s:Song {title:"Tum Hi Ho"})
+RETURN a.name AS ArtistsPerforming;
+
+//Q4
+MATCH (s:Song)-[:RecordedIn]->(rs:RecordingStudio {name:"YRF Studio"})
+RETURN s.title AS SongsRecorded;
+
+//Assign 6 Questions
+
+//Q1
+MATCH (a:Artist)-[:Performs]->(s:Song)-[:WrittenBy]->(sa:SongAuthor)
+WITH a, COLLECT(DISTINCT sa.name) AS authors
+WHERE authors = ["Amitabh Bhattacharya"]  // Replace with your author
+RETURN a.name AS Artists;
+
+//Q2
+MATCH (a:Artist)-[:Performs]->(s:Song)-[:RecordedIn]->(rs:RecordingStudio {name:"YRF Studio"})
+WITH a, COUNT(s) AS songsCount
+ORDER BY songsCount DESC
+LIMIT 1
+RETURN a.name AS TopArtist, songsCount;
+
+//Q3
+MATCH (a:Artist {name:"Arijit Singh"})-[:Performs]->(s:Song)-[:RecordedIn]->(rs:RecordingStudio)-[:ManagedBy]->(rc:RecordingCompany {name:"Yash Raj Films"})
+RETURN s.title AS Songs;
+
+
+//Employee Databse
+
+// Create Departments
+CREATE (d1:Department {dept_id: 1, name: 'IT'}),
+       (d2:Department {dept_id: 2, name: 'Finance'}),
+       (d3:Department {dept_id: 3, name: 'Operations'});
+
+// Create Employees
+CREATE (e1:Employee {emp_id: 101, name: 'Amit Sharma'}),
+       (e2:Employee {emp_id: 102, name: 'Priya Singh'}),
+       (e3:Employee {emp_id: 103, name: 'Rajesh Kumar'});
+
+// Create Skills
+CREATE (s1:Skillset {skill_id: 1, name: 'Java'}),
+       (s2:Skillset {skill_id: 2, name: 'Data Analysis'}),
+       (s3:Skillset {skill_id: 3, name: 'Project Management'});
+
+// Create Projects
+CREATE (p1:Project {project_id: 1001, name: 'Digital India Initiative'}),
+       (p2:Project {project_id: 1002, name: 'Smart City Development'});
+
+// Employees work in Departments
+MATCH (e:Employee {emp_id: 101}), (d:Department {dept_id: 1})
+CREATE (e)-[:WORKS_IN]->(d);
+
+MATCH (e:Employee {emp_id: 102}), (d:Department {dept_id: 2})
+CREATE (e)-[:WORKS_IN]->(d);
+
+MATCH (e:Employee {emp_id: 103}), (d:Department {dept_id: 3})
+CREATE (e)-[:WORKS_IN]->(d);
+
+// Employees have acquired Skills
+MATCH (e:Employee {emp_id: 101}), (s:Skillset {skill_id: 1})
+CREATE (e)-[:HAS_ACQUIRED]->(s);
+
+MATCH (e:Employee {emp_id: 102}), (s:Skillset {skill_id: 2})
+CREATE (e)-[:HAS_ACQUIRED]->(s);
+
+MATCH (e:Employee {emp_id: 103}), (s:Skillset {skill_id: 3})
+CREATE (e)-[:HAS_ACQUIRED]->(s);
+
+// Employees assigned to Projects
+MATCH (e:Employee {emp_id: 101}), (p:Project {project_id: 1001})
+CREATE (e)-[:ASSIGNED_TO]->(p);
+
+MATCH (e:Employee {emp_id: 102}), (p:Project {project_id: 1002})
+CREATE (e)-[:ASSIGNED_TO]->(p);
+
+MATCH (e:Employee {emp_id: 103}), (p:Project {project_id: 1001})
+CREATE (e)-[:ASSIGNED_TO]->(p);
+
+// Projects controlled by Departments
+MATCH (p:Project {project_id: 1001}), (d:Department {dept_id: 1})
+CREATE (p)-[:CONTROLLED_BY]->(d);
+
+MATCH (p:Project {project_id: 1002}), (d:Department {dept_id: 3})
+CREATE (p)-[:CONTROLLED_BY]->(d);
+
+// Employee is Project Manager of a Project
+MATCH (e:Employee {emp_id: 103}), (p:Project {project_id: 1001})
+CREATE (e)-[:PROJECT_MANAGER_OF]->(p);
+
+
+//To see graph
+MATCH (n) OPTIONAL MATCH (n)-[r]->(m) RETURN n, r, m LIMIT 100;
+
+
+//Assignment 5 Questions
+//a) List the names of employees in the department “IT”
+MATCH (e:Employee)-[:WORKS_IN]->(d:Department {name: "IT"})
+RETURN e.name AS EmployeeName;
+
+
+//b) List the projects along with their properties, controlled by department “IT”
+MATCH (p:Project)-[:CONTROLLED_BY]->(d:Department {name: "IT"})
+RETURN p;
+
+
+//c) List the departments along with the count of employees in it
+MATCH (d:Department)<-[:WORKS_IN]-(e:Employee)
+RETURN d.name AS DepartmentName, COUNT(e) AS EmployeeCount;
+
+//d) List the skillset for an employee “Rajesh Kumar”
+MATCH (e:Employee {name: "Rajesh Kumar"})-[:HAS_ACQUIRED]->(s:Skillset)
+RETURN s.name AS SkillName;
+
+//Assignment 6 quetions
+
+
+//a) List the names of employees having the same skills as employee “Amit Sharma"
+MATCH (e1:Employee {name: "Amit Sharma"})-[:HAS_ACQUIRED]->(s:Skillset)<-[:HAS_ACQUIRED]-(e2:Employee)
+WHERE e1 <> e2
+RETURN DISTINCT e2.name AS EmployeeWithSameSkills;
+
+//b) List the projects controlled by a department “IT” and have employees of the same department working in it.
+MATCH (p:Project)-[:CONTROLLED_BY]->(d:Department {name: "IT"})
+MATCH (e:Employee)-[:WORKS_IN]->(d)
+MATCH (e)-[:ASSIGNED_TO]->(p)
+RETURN DISTINCT p.name AS ProjectName;
+
+
+//c) List the names of the projects belonging to departments managed by employee “Sneha Patel”
+MATCH (e:Employee {name: "Sneha Patel"})-[:PROJECT_MANAGER_OF]->(p:Project)
+MATCH (p)-[:CONTROLLED_BY]->(d:Department)
+RETURN DISTINCT p.name AS ProjectName, d.name AS DepartmentName;
