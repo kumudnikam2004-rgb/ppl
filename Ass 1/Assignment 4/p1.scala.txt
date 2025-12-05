@@ -1,0 +1,20 @@
+Q- Program to check if two given string are rotations of each other.
+
+
+object p1 {
+  def main(args: Array[String]): Unit = {
+    println("Enter first string:")
+    val str1 = scala.io.StdIn.readLine()
+
+    println("Enter second string:")
+    val str2 = scala.io.StdIn.readLine()
+
+   
+    val isRotation = (str1.length == str2.length) && (str1 + str1).contains(str2)
+
+    if (isRotation)
+      println(s"'$str2' is a rotation of '$str1'")
+    else
+      println(s"'$str2' is NOT a rotation of '$str1'")
+  }
+}

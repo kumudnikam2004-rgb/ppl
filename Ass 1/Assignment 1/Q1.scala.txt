@@ -1,0 +1,20 @@
+Write a Scala program to check if a given number is positive, negative, or zero using if/else statements.
+
+
+import scala.io.StdIn
+object Q1{
+    def main(args:Array[String]):Unit={
+        try{
+            println("Enter the Number : ")
+            val num = StdIn.readInt()
+            if(num > 0)
+                println(s"$num is Positive Number.")
+            else if(num < 0)
+                println(s"$num is Negative Number.")
+            else    
+                println(s"$num is Zero.")
+        }catch{
+            case e : Exception => print(e.getMessage)
+        }
+    }
+}

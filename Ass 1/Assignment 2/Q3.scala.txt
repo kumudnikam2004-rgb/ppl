@@ -1,0 +1,61 @@
+Q- Program to read an integer from a user and convert it to binary and octal using user defined functions.
+
+
+import scala.io.StdIn.readInt
+
+object Q3 {
+
+  def toBinary(n: Int): String = {
+    try {
+      if (n == 0) "0"
+      else {
+        var num = n
+        var binary = ""
+        while (num > 0) {
+          binary = (num % 2) + binary
+          num = num / 2
+        }
+        binary
+      }
+    } catch {
+      case e: Exception =>
+        println("Error in toBinary: " + e.getMessage)
+        ""
+    }
+  }
+
+  def toOctal(n: Int): String = {
+    try {
+      if (n == 0) "0"
+      else {
+        var num = n
+        var octal = ""
+        while (num > 0) {
+          octal = (num % 8) + octal
+          num = num / 8
+        }
+        octal
+      }
+    } catch {
+      case e: Exception =>
+        println("Error in toOctal: " + e.getMessage)
+        ""
+    }
+  }
+
+  def main(args: Array[String]): Unit = {
+    try {
+      println("Enter an integer:")
+      val n = readInt()
+
+      val binaryRep = toBinary(n)
+      val octalRep = toOctal(n)
+
+      println(s"Binary representation of $n is: $binaryRep")
+      println(s"Octal representation of $n is: $octalRep")
+    } catch {
+      case e: Exception =>
+        println("Error: " + e.getMessage)
+    }
+  }
+}

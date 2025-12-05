@@ -1,0 +1,18 @@
+Q- Creat an array of string and read a string from the user. Display all the element of an array containing a given string.
+
+object p2 {
+  def main(args: Array[String]): Unit = {
+    val arr = Array("apple", "pineapple", "grape", "mango", "appetizer")
+
+    println("Enter string to search:")
+    val search = scala.io.StdIn.readLine().toLowerCase()
+
+    println(s"Elements containing '$search':")
+    val result = arr.filter(_.toLowerCase.contains(search))
+
+    if (result.isEmpty)
+      println("No matching elements found.")
+    else
+      result.foreach(println)
+  }
+}

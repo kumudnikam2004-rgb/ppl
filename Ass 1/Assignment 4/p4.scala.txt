@@ -1,0 +1,19 @@
+Q- Program to read two string, append them together and return the result. If the length of the string is differnt, remove characters from the beginning of the longer string and makes them equal length.
+
+
+object p4 {
+  def main(args: Array[String]): Unit = {
+    println("Enter first string:")
+    var str1 = scala.io.StdIn.readLine()
+
+    println("Enter second string:")
+    var str2 = scala.io.StdIn.readLine()
+
+    val minLen = Math.min(str1.length, str2.length)
+    str1 = str1.takeRight(minLen)
+    str2 = str2.takeRight(minLen)
+
+    val result = str1 + str2
+    println(s"Result after adjusting and appending: $result")
+  }
+}

@@ -1,0 +1,31 @@
+Q-S Program to find the second maximum of four given number using If/else statement
+
+
+import scala.io.StdIn
+object Q2{
+    def main(args:Array[String]):Unit={ 
+        try{    
+            print("Enter 4 Numbers : ")
+            val a = StdIn.readInt()
+            val b = StdIn.readInt()
+            val c = StdIn.readInt()
+            val d = StdIn.readInt()
+
+            var firstMax = a
+            var secondMax = a
+
+            if(b > firstMax) firstMax = b
+            if(c > firstMax) firstMax = c 
+            if(d > firstMax) firstMax = d
+
+            if(a < firstMax && a > secondMax) secondMax = a 
+            if(b < firstMax && b > secondMax) secondMax = b 
+            if(c < firstMax && c > secondMax) secondMax = c 
+            if(d < firstMax && d > secondMax) secondMax = d 
+
+            println(s"Second Maximum of $a, $b, $c, $d = $secondMax")
+        }catch{
+            case e : Exception => print(e.getMessage)
+        }
+    }
+}

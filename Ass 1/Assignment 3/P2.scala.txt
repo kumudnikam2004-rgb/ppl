@@ -1,0 +1,14 @@
+Q- Program to read a character from the user and count the number of occurrences  of that character in the given string .
+
+
+import scala.io.StdIn;
+
+object P2 {
+  def main(args: Array[String]): Unit = {
+    val input = StdIn.readLine("Enter a string: ")
+    val charToFind = StdIn.readChar("Enter the Cahracter to find : ")
+
+    val count = input.count(_ == charToFind)
+    println(s"Character '$charToFind' occurred $count times in the string.")
+  }
+}

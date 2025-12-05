@@ -1,0 +1,33 @@
+Q- Program to read Five random number and check whether numbers are perfect or not.
+
+
+import scala.util.Random
+
+object Q1 {
+
+  def isPerfect(n: Int): Boolean = {
+    if (n <= 1) 
+        return false
+    var sumDivisor = 0
+    for (i <- 1 to n / 2) {
+      if (n % i == 0) {
+        sumDivisor += i
+      }
+    }
+    sumDivisor == n
+  }
+
+  def main(args: Array[String]): Unit = {
+    val rand = new Random()
+    val randomNums = Array.fill(5)(rand.nextInt(10) + 1)
+
+    println("Generated Numbers are = " + randomNums.mkString(", "))
+
+    for (num <- randomNums) {
+      if (isPerfect(num))
+        println(s"$num is a Perfect Number.")
+      else
+        println(s"$num is NOT a Perfect Number.")
+    }
+  }
+}

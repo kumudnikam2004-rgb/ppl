@@ -1,0 +1,14 @@
+Q- Program to count uppercase letter in a string and convert it to Lowercase and display the new string.
+
+
+import scala.io.StdIn;
+object P1 {
+  def main(args: Array[String]): Unit = {
+    val input = StdIn.readLine("Enter a string: ")
+    val uppercaseCount = input.count(_.isUpper)
+    val lower = input.toLowerCase
+
+    println(s"Number of uppercase letters: $uppercaseCount")
+    println(s"Lowercase string: $lower")
+  }
+}

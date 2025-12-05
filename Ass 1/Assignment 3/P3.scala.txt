@@ -1,0 +1,17 @@
+Q- Program to remove the character in a given position of a given string . Check for a given position should be in the range 0...string length -1 inclusive.
+
+
+import scala.io.StdIn;
+object P3 {
+  def main(args: Array[String]): Unit = {
+    val input = StdIn.readLine("Enter a string: ")
+    val pos = StdIn.readInt()
+
+    if (pos >= 0 && pos < input.length) {
+      val result = input.substring(0, pos) + input.substring(pos + 1)
+      println(s"String after removing character at position $pos: $result")
+    } else {
+      println("Invalid position! Position should be in range 0 to string length - 1.")
+    }
+  }
+}
